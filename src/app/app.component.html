@@ -1,0 +1,101 @@
+<div class="min-h-screen flex flex-col lg:flex-row">
+  <!-- First Section (75% width on large screens) -->
+  <div class="w-full p-4">
+    <div class="left-side relative">
+      <div>
+        <h1 class="text-blue-500 text-xl">User Details</h1>
+        <div *ngIf="userResults && userResults.length > 0">
+          <div
+            *ngFor="let user of userResults"
+            class="bg-white shadow-md rounded-lg p-4 mb-4"
+          >
+            <p class="text-lg font-semibold text-gray-800">
+              {{ user.username }}
+            </p>
+            <p class="text-sm text-gray-600">{{ user.email }}</p>
+          </div>
+        </div>
+        <div
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer inline-block"
+          (click)="triggerNewRequest()"
+        >
+          trigger New Request
+        </div>
+        <h1 class="text-blue-500 text-xl">Users</h1>
+        <div *ngIf="users && users.length > 0; else noUsers">
+          <div
+            *ngFor="let user of users"
+            class="bg-white shadow-md rounded-lg p-4 mb-4"
+          >
+            <p class="text-lg font-semibold text-gray-800">
+              {{ user.username }}
+            </p>
+            <p class="text-sm text-gray-600">{{ user.email }}</p>
+          </div>
+        </div>
+        <!-- Fallback for when there are no users or an error occurred -->
+        <ng-template #noUsers>
+          <div *ngIf="errorMessagesFromUsersService" class="text-red-500">
+            <p>{{ errorMessagesFromUsersService }}</p>
+          </div>
+          <div *ngIf="!errorMessagesFromUsersService" class="text-gray-500">
+            <p>No user data available.</p>
+          </div>
+        </ng-template>
+      </div>
+      <p class="text-green-500 text-xl">User posts</p>
+      <form [formGroup]="searchForm">
+        <input
+          formControlName="search"
+          type="text"
+          class="mt-2 border w-[95%] p-2 outline-blue-500"
+          placeholder="search..."
+        />
+        <div class="text-red-400" *ngIf="search.touched && search.invalid">
+          <div *ngIf="search?.errors?.['required']">Enter something</div>
+          <div *ngIf="search?.errors?.['minlength']">
+            Enter at least
+            {{search.errors?.['minlength']?.requiredLength}} character
+          </div>
+          <!-- <div *ngIf="search?.errors?.['cannotContainSpace']">
+            Can not contain space...
+          </div> -->
+        </div>
+      </form>
+      <div class="h-[300px] absolute top-3 left-[50%]">
+        <app-loading-spinner *ngIf="isLoading || isLoadingOnButton"></app-loading-spinner>
+      </div>
+      <!-- Your main content -->
+      <div *ngIf="!isLoading">
+        <!-- Content here -->
+        <!-- <ul>
+          <li *ngFor="let result of searchResults">{{ result }}</li>
+        </ul> -->
+        <!-- app.component.html -->
+        <div *ngIf="errorMessage && errorMessage.length > 0">
+          <p class="text-red-600">{{ errorMessage }}</p>
+        </div>
+        <div class="container mx-auto px-4 py-8">
+          <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div
+              *ngFor="let post of searchResults"
+              class="bg-white rounded-lg shadow-md overflow-hidden"
+            >
+              <img
+                [src]="post.image"
+                alt="Post Image"
+                class="w-full h-48 object-cover"
+              />
+              <div class="p-4">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                  {{ post.title }}
+                </h2>
+                <p class="text-gray-600 mb-4">{{ post.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
