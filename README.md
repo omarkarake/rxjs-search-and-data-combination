@@ -1,6 +1,6 @@
 # ExploringBasicRxjsOperator
 
-Hosted link: https://basic-rxjs-operator.vercel.app/
+Hosted link: https://rxjs-search-and-data-combination.vercel.app/
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.6.
 
